@@ -72,7 +72,9 @@ gcc -masm=intel -fno-asynchronous-unwind-tables -fno-jump-tables -fno-stack-prot
 Убраны лишние макросы, в том числе endbr64.    
 Удалены cdqe и nop, добавленные компилятором для дополнения.  
 Удалены промежуточные присваивания на подобии:  
-  
+![image](https://user-images.githubusercontent.com/57359954/203371590-a1805288-767c-47fa-8b19-54ffaa3db3ca.png)  
+![image](https://user-images.githubusercontent.com/57359954/203373413-ff75e846-8ec8-4a3f-b45b-f199d4c03a00.png)  
+
 или  
   
 или  
