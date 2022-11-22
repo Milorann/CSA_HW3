@@ -27,10 +27,8 @@ double input(const char *inp){
 void output(const char *outp, double x, double ans_ps, double ans_precise, long t){
     FILE *myfile;
     myfile = fopen(outp, "w");
-    fprintf(myfile, "Number: %lf\n", x);
-    fprintf(myfile, "Power series answer: %lf\n", ans_ps);
-    fprintf(myfile, "Precise answer: %lf\n", ans_precise);
-    fprintf(myfile, "Time spent: %ld\n", t);
+    fprintf(myfile, "Number: %lf\nPower series answer: %lf\n", x, ans_ps);
+    fprintf(myfile, "Precise answer: %lf\nTime spent: %ld\n", ans_precise, t);
     fclose(myfile);
 }
 
