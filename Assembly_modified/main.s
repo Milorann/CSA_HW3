@@ -11,45 +11,44 @@
 	.globl	main
 	.type	main, @function
 main:
-	endbr64
 	push	rbp
 	mov	rbp, rsp
 	push	rbx
 	sub	rsp, 72
-	mov	DWORD PTR -68[rbp], edi
-	mov	QWORD PTR -80[rbp], rsi
-	cmp	DWORD PTR -68[rbp], 5
+	mov	DWORD PTR -68[rbp], edi     # загрузка argс на стэк
+	mov	QWORD PTR -80[rbp], rsi     # загрузка argv на стэк
+	
+	cmp	DWORD PTR -68[rbp], 5       # argc сранивается с 5
 	je	.L2
-	lea	rax, .LC0[rip]
-	mov	rdi, rax
+	lea	rdi, .LC0[rip]
 	call	puts@PLT
 	mov	edi, 1
 	call	exit@PLT
+	
 .L2:
-	mov	rax, QWORD PTR -80[rbp]
-	add	rax, 24
-	mov	rax, QWORD PTR [rax]
-	mov	rdi, rax
+	mov	rax, QWORD PTR -80[rbp]         # получаем argv
+	add	rax, 24                         # argv[3]
+	mov	rdi, QWORD PTR [rax]            # аргумент atoi (argv[3])
 	call	atoi@PLT
-	mov	DWORD PTR -40[rbp], eax
-	pxor	xmm0, xmm0
-	movsd	QWORD PTR -24[rbp], xmm0
-	cmp	DWORD PTR -40[rbp], 1
+	mov	DWORD PTR -40[rbp], eax         # choice = atoi(argv[3])
+	
+	pxor	xmm0, xmm0                  
+	movsd	QWORD PTR -24[rbp], xmm0    # x = 0
+	
+	cmp	DWORD PTR -40[rbp], 1           # choice сравнивается с 1
 	jne	.L3
-	mov	rax, QWORD PTR -80[rbp]
-	add	rax, 8
-	mov	rax, QWORD PTR [rax]
-	mov	rdi, rax
+	mov	rax, QWORD PTR -80[rbp]         # получаем argv
+	add	rax, 8                          # argv[1]
+	mov	rdi, QWORD PTR [rax]            # аргумент input (argv[1])
 	call	input@PLT
-	movq	rax, xmm0
-	mov	QWORD PTR -24[rbp], rax
+	movq	QWORD PTR -24[rbp], xmm0    # x = input(argv[1])
+	
 .L3:
-	cmp	DWORD PTR -40[rbp], 2
+	cmp	DWORD PTR -40[rbp], 2           # choice сравнивается с 2
 	jne	.L4
 	mov	eax, 0
 	call	generate@PLT
-	movq	rax, xmm0
-	mov	QWORD PTR -24[rbp], rax
+	movq	QWORD PTR -24[rbp], xmm0    # x = generate()
 .L4:
 	movsd	xmm0, QWORD PTR .LC2[rip]
 	comisd	xmm0, QWORD PTR -24[rbp]
