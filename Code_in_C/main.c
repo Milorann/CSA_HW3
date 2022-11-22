@@ -22,6 +22,10 @@ int main(int argc, char *argv[])
     if(choice == 2){
         x = generate();
     }
+    if(x <= -M_PI_2 || x >= M_PI_2){
+        printf("Wrong number for tg. Termination.\n");
+        exit(1);
+    }
     double ans = 0;
     time_t start = time(NULL);
     for(int i = 0; i < atoi(argv[4]); i++){
