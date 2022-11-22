@@ -65,23 +65,20 @@ gcc -masm=intel -fno-asynchronous-unwind-tables -fno-jump-tables -fno-stack-prot
   
 ### Информация, подтверждающая выполнение задания на 8 ###
 В программе ищется значение тангенса для числа, модуль которого меньше pi/2.  
+Числа Бернулли и факториалы описаны до n = 20, т.к. факториалы чисел больше 20 уже не помещаются в unsigned long long. Поэтому степенной ряд вычисляется до 10 члена.  
 Приведен код на C на оценку 8.  
 Добавлены комментарии.  
 Удалены из конца кода строки ниже ret, а из начала информация о файле, из которой получили код на ассемблере.  
 Убраны лишние макросы, в том числе endbr64.    
 Удалены cdqe и nop, добавленные компилятором для дополнения.  
 Удалены промежуточные присваивания на подобии:  
-<img width="151" alt="image" src="https://user-images.githubusercontent.com/57359954/200162263-9bbf45f8-cef4-4c22-a298-bba1cd8c2154.png">  
-<img width="180" alt="image" src="https://user-images.githubusercontent.com/57359954/200162287-fd5b32b1-9454-4762-a81c-19b18b748944.png">  
+  
 или  
-<img width="206" alt="image" src="https://user-images.githubusercontent.com/57359954/200162943-fcd441b2-3f04-4593-894f-d792313ba688.png">  
-<img width="184" alt="image" src="https://user-images.githubusercontent.com/57359954/200162977-5a3a157a-adde-41ab-81ab-32c99dbe74d8.png">  
+  
 или  
-<img width="204" alt="image" src="https://user-images.githubusercontent.com/57359954/200165522-b875b501-484c-48f3-afde-2f32024b0bb1.png">  
-<img width="205" alt="image" src="https://user-images.githubusercontent.com/57359954/200165560-70d15e6e-c221-4955-947d-85e72592cc69.png">  
+  
 или  
-<img width="229" alt="image" src="https://user-images.githubusercontent.com/57359954/200772055-505ef661-547a-4cee-b09e-61b2be62f3d8.png">  
-<img width="230" alt="image" src="https://user-images.githubusercontent.com/57359954/200772189-1ac31128-dd15-45fa-8642-7b107632555c.png">    
+    
 Программа протестирована на приведенных тестах. Результаты совпадают с результатами программы на C.  
 В программе использованы следующие функции с аргументами: ввод из файла (на вход имя файла), вывод в файл (на вход имя файла), генерация случайной строки(на вход n).  
 Использованы локальные переменные n, i, end, start, ind_ans, flag, j, choice.  
