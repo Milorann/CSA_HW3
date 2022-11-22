@@ -6,7 +6,7 @@
 extern double tg(double x);
 extern double generate();
 extern double input(const char *inp);
-extern void output(const char *outp, double xps, double x_precise, long t);
+extern void output(const char *outp, double x, double xps, double x_precise, long t);
 
 int main(int argc, char *argv[])
 {
@@ -28,6 +28,6 @@ int main(int argc, char *argv[])
         ans = tg(x);
     }
     time_t end = time(NULL);
-    output(argv[2], ans, tan(x), end-start);
+    output(argv[2], x, ans, tan(x), end-start);
     return 0;
 }
