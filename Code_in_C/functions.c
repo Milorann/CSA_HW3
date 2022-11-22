@@ -24,9 +24,10 @@ double input(const char *inp){
     return x;
 }
 
-void output(const char *outp, double ans_ps, double ans_precise, long t){
+void output(const char *outp, double x, double ans_ps, double ans_precise, long t){
     FILE *myfile;
     myfile = fopen(outp, "w");
+    fprintf(myfile, "Number: %lf\n", x);
     fprintf(myfile, "Power series answer: %lf\n", ans_ps);
     fprintf(myfile, "Precise answer: %lf\n", ans_precise);
     fprintf(myfile, "Time spent: %ld\n", t);
@@ -36,7 +37,8 @@ void output(const char *outp, double ans_ps, double ans_precise, long t){
 double tg(double x){
     double ans = 0;
     for(int i = 1; i < 11; i++){
-        ans += bernulli[2*i]*pow(-4,i)*(1-pow(4,i))/factorials[2*i]*powl(x,2*i-1);
+        ans += bernulli[2 * i] * pow(-4, i) * (1 - pow(4, i)) /
+            factorials[2 * i] * powl(x, 2 * i - 1);
     }
     return ans;
 }
@@ -44,7 +46,5 @@ double tg(double x){
 double generate(){
     srand(time(NULL));
     double x = -1.5707 + (rand() / (RAND_MAX / (1.5707 + 1.5707)));
-    printf("Generated number:\n%lf", x);
-    printf("\n");
     return x;
 }
