@@ -8,7 +8,7 @@
 
 Разработать программу, вычисляющую с помощью степенного ряда
 с точностью не хуже 0,05% значение функции tan(x) для заданного
-параметра x.
+параметра x.  
 ![image](https://user-images.githubusercontent.com/57359954/203353083-0ddd98d4-a2b6-4195-800f-8530ab32dd56.png)  
 
 ![image](https://user-images.githubusercontent.com/57359954/202900741-d956115a-4361-41d6-aacf-bacac4435e67.png)  
