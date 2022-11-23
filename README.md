@@ -78,7 +78,8 @@ gcc -masm=intel -fno-asynchronous-unwind-tables -fno-jump-tables -fno-stack-prot
 ![image](https://user-images.githubusercontent.com/57359954/203594905-dd3ddd84-1327-4d5e-9b28-17e57f3284ce.png)  
 ![image](https://user-images.githubusercontent.com/57359954/203594996-5b6cd3a9-ce43-43eb-b11b-6626f2262eec.png)  
 или  
-  
+![image](https://user-images.githubusercontent.com/57359954/203595748-b9d27f55-822a-49f4-8cdd-882b09e0abbd.png)  
+![image](https://user-images.githubusercontent.com/57359954/203595818-74e132dd-2191-401e-b781-1920b93dcdae.png)  
 или  
     
 Программа протестирована на приведенных тестах. Результаты совпадают с результатами программы на C.  
