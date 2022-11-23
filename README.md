@@ -79,7 +79,9 @@ gcc -masm=intel -fno-asynchronous-unwind-tables -fno-jump-tables -fno-stack-prot
 ![image](https://user-images.githubusercontent.com/57359954/203595748-b9d27f55-822a-49f4-8cdd-882b09e0abbd.png)  
 ![image](https://user-images.githubusercontent.com/57359954/203595818-74e132dd-2191-401e-b781-1920b93dcdae.png)  
 или  
-    
+![image](https://user-images.githubusercontent.com/57359954/203599270-ba9b11d9-3b42-46f3-bb2b-980cff03ef33.png)  
+![image](https://user-images.githubusercontent.com/57359954/203599385-76005cfe-1ba4-4fd4-89d0-6a5c651c7928.png)  
+
 Программа протестирована на приведенных тестах. Результаты совпадают с результатами программы на C.  
 В программе использованы следующие функции с аргументами: ввод из файла (на вход имя файла), вывод в файл (на вход имя файла), генерация случайной строки(на вход n).  
 Использованы локальные переменные n, i, end, start, ind_ans, flag, j, choice.  
