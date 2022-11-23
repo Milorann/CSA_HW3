@@ -101,16 +101,16 @@ main:
 	mov	rax, QWORD PTR [rax]            # argv[2]
 	movsd	xmm0, QWORD PTR -32[rbp]    # ans
 	mov	rdx, QWORD PTR -24[rbp]         # x
-	mov	rsi, rbx
-	movq	xmm2, rcx
-	movapd	xmm1, xmm0
-	movq	xmm0, rdx
-	mov	rdi, rax
+	mov	rsi, rbx                        # 5-й аргумент для output (end - start)
+	movq	xmm2, rcx                   # 4-й аргумент для output (tan(x))
+	movapd	xmm1, xmm0                  # 3-й аргумент для output (ans)
+	movq	xmm0, rdx                   # 2-й аргумент для output (x)
+	mov	rdi, rax                        # 1-й аргумент для output (argv[2])
 	call	output@PLT
 	mov	eax, 0
 	mov	rbx, QWORD PTR -8[rbp]
 	leave
-	ret
+	ret                                 # завершение программы
 	.size	main, .-main
 	
 	.section	.rodata
