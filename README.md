@@ -76,6 +76,8 @@ gcc -masm=intel -fno-asynchronous-unwind-tables -fno-jump-tables -fno-stack-prot
 ![image](https://user-images.githubusercontent.com/57359954/203373413-ff75e846-8ec8-4a3f-b45b-f199d4c03a00.png)  
 
 или  
+![image](https://user-images.githubusercontent.com/57359954/203594905-dd3ddd84-1327-4d5e-9b28-17e57f3284ce.png)  
+![image](https://user-images.githubusercontent.com/57359954/203594996-5b6cd3a9-ce43-43eb-b11b-6626f2262eec.png)  
   
 или  
   
