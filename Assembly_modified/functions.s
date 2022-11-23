@@ -5,7 +5,7 @@
 	.align 32
 	.type	factorials, @object
 	.size	factorials, 168
-factorials:
+factorials:                 # факториалы до 20 включительно
 	.quad	1
 	.quad	1
 	.quad	2
@@ -31,7 +31,7 @@ factorials:
 	.align 32
 	.type	bernulli, @object
 	.size	bernulli, 168
-bernulli:
+bernulli:                   # числа Бернулли до 20 включительно
 	.long	0
 	.long	1072693248
 	.long	0
@@ -84,25 +84,24 @@ bernulli:
 	.text
 	.globl	input
 	.type	input, @function
-input:
-	endbr64
+input:                              # подпрограмма считывания строки из файла
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 32
-	mov	QWORD PTR -24[rbp], rdi
-	mov	rax, QWORD PTR -24[rbp]
-	lea	rdx, .LC0[rip]
-	mov	rsi, rdx
-	mov	rdi, rax
+	mov	QWORD PTR -24[rbp], rdi     # загрузка inp на стэк
+	mov	rax, QWORD PTR -24[rbp]     # inp
+	lea	rdx, .LC0[rip]              # строка формата открытия файла
+	mov	rsi, rdx                    # 2-й аргумент для fopen ("r")
+	mov	rdi, rax                    # 1-й аргумент для fopen (inp)
 	call	fopen@PLT
-	mov	QWORD PTR -8[rbp], rax
-	cmp	QWORD PTR -8[rbp], 0
+	mov	QWORD PTR -8[rbp], rax      # myfile = fopen(inp, "r")
+	cmp	QWORD PTR -8[rbp], 0        # сравнения myfile с NULL
 	jne	.L2
-	lea	rax, .LC1[rip]
-	mov	rdi, rax
+	lea	rdi, .LC1[rip]              # аргумент для printf (puts)
 	call	puts@PLT
-	mov	edi, 1
+	mov	edi, 1                      # аргумент для exit
 	call	exit@PLT
+	
 .L2:
 	lea	rdx, -16[rbp]
 	mov	rax, QWORD PTR -8[rbp]
@@ -133,7 +132,6 @@ input:
 	.globl	output
 	.type	output, @function
 output:
-	endbr64
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 64
@@ -170,14 +168,12 @@ output:
 	mov	rax, QWORD PTR -8[rbp]
 	mov	rdi, rax
 	call	fclose@PLT
-	nop
 	leave
 	ret
 	.size	output, .-output
 	.globl	tg
 	.type	tg, @function
 tg:
-	endbr64
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 48
@@ -266,7 +262,6 @@ tg:
 	.globl	generate
 	.type	generate, @function
 generate:
-	endbr64
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 16
