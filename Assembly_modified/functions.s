@@ -113,7 +113,7 @@ input:                              # подпрограмма считыван�
 	call	fclose@PLT
 	movsd	xmm0, QWORD PTR -16[rbp]    # возвращаемое значение (x)
 	leave
-	ret
+	ret                                 # завершение подпрограммы
 	.size	input, .-input
 	
 	.section	.rodata
@@ -161,51 +161,50 @@ output:                                 # подпрограмма вывода 
 	mov	rdi, QWORD PTR -8[rbp]          # аргумент для fclose (myfile)
 	call	fclose@PLT
 	leave
-	ret
+	ret                                 # завершение подпрограммы
 	.size	output, .-output
 	
 	.globl	tg
 	.type	tg, @function
-tg:
+tg:                                     # подпрограмма вычисления тангенса
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 48
-	movsd	QWORD PTR -24[rbp], xmm0
+	movsd	QWORD PTR -24[rbp], xmm0    # загрузка x на стэк
 	pxor	xmm0, xmm0
-	movsd	QWORD PTR -8[rbp], xmm0
-	mov	DWORD PTR -12[rbp], 1
+	movsd	QWORD PTR -8[rbp], xmm0     # ans = 0
+	mov	DWORD PTR -12[rbp], 1           # i = 1
 	jmp	.L6
 .L9:
-	mov	eax, DWORD PTR -12[rbp]
-	add	eax, eax
+	mov	eax, DWORD PTR -12[rbp]         # i
+	add	eax, eax                        # 2*i
 	cdqe
 	lea	rdx, 0[0+rax*8]
-	lea	rax, bernulli[rip]
-	movsd	xmm2, QWORD PTR [rdx+rax]
-	movsd	QWORD PTR -48[rbp], xmm2
+	lea	rax, bernulli[rip]              # bernulli
+	movsd	xmm2, QWORD PTR [rdx+rax]   # bernulli[2 * i]
+	movsd	QWORD PTR -48[rbp], xmm2    # bernulli[2 * i]
 	pxor	xmm0, xmm0
-	cvtsi2sd	xmm0, DWORD PTR -12[rbp]
-	mov	rax, QWORD PTR .LC7[rip]
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
+	cvtsi2sd	xmm1, DWORD PTR -12[rbp]    # 2-й аргумент для pow (i)
+	movq	xmm0, QWORD PTR .LC7[rip]       # 1-й аргумент для pow (-4)
 	call	pow@PLT
-	mulsd	xmm0, QWORD PTR -48[rbp]
-	movsd	QWORD PTR -48[rbp], xmm0
+	
+	mulsd	xmm0, QWORD PTR -48[rbp]        # bernulli[2 * i] * pow(-4, i)
+	movsd	QWORD PTR -48[rbp], xmm0        # -//-
 	pxor	xmm0, xmm0
-	cvtsi2sd	xmm0, DWORD PTR -12[rbp]
-	mov	rax, QWORD PTR .LC8[rip]
-	movapd	xmm1, xmm0
-	movq	xmm0, rax
+	
+	cvtsi2sd	xmm1, DWORD PTR -12[rbp]    # 2-й аргумент для pow (i)
+	movq	xmm0, QWORD PTR .LC8[rip]       # 1-й аргумент для pow (4)
 	call	pow@PLT
-	movsd	xmm1, QWORD PTR .LC9[rip]
-	subsd	xmm1, xmm0
+	
+	movsd	xmm1, QWORD PTR .LC9[rip]       # 1
+	subsd	xmm1, xmm0                      # 1 - pow(4, i)
 	mulsd	xmm1, QWORD PTR -48[rbp]
-	mov	eax, DWORD PTR -12[rbp]
-	add	eax, eax
+	mov	eax, DWORD PTR -12[rbp]             # i
+	add	eax, eax                            # 2*i
 	cdqe
 	lea	rdx, 0[0+rax*8]
-	lea	rax, factorials[rip]
-	mov	rax, QWORD PTR [rdx+rax]
+	lea	rax, factorials[rip]                # factorials
+	mov	rax, QWORD PTR [rdx+rax]            # factorials[2 * i]
 	test	rax, rax
 	js	.L7
 	pxor	xmm0, xmm0
@@ -220,80 +219,83 @@ tg:
 	cvtsi2sd	xmm0, rdx
 	addsd	xmm0, xmm0
 .L8:
-	divsd	xmm1, xmm0
-	movsd	QWORD PTR -48[rbp], xmm1
+	divsd	xmm1, xmm0  # bernulli[2 * i] * pow(-4, i) * (1 - pow(4, i)) / factorials[2 * i]
+	movsd	QWORD PTR -48[rbp], xmm1    # -//-
 	fld	QWORD PTR -48[rbp]
 	fstp	TBYTE PTR -48[rbp]
-	mov	eax, DWORD PTR -12[rbp]
-	add	eax, eax
-	sub	eax, 1
-	mov	DWORD PTR -28[rbp], eax
+	mov	eax, DWORD PTR -12[rbp]         # i
+	add	eax, eax                        # 2 * i
+	sub	eax, 1                          # 2 * i - 1
+	mov	DWORD PTR -28[rbp], eax         # 2 * i - 1
 	fild	DWORD PTR -28[rbp]
-	fld	QWORD PTR -24[rbp]
+	fld	QWORD PTR -24[rbp]              # x
 	fxch	st(1)
 	lea	rsp, -16[rsp]
 	fstp	TBYTE PTR [rsp]
 	lea	rsp, -16[rsp]
 	fstp	TBYTE PTR [rsp]
-	call	powl@PLT
+	call	powl@PLT                    # powl(x, 2 * i - 1)
 	add	rsp, 32
 	fld	TBYTE PTR -48[rbp]
 	fmulp	st(1), st
 	fld	QWORD PTR -8[rbp]
 	faddp	st(1), st
 	fstp	QWORD PTR -8[rbp]
-	add	DWORD PTR -12[rbp], 1
+	add	DWORD PTR -12[rbp], 1           # i++
 .L6:
-	cmp	DWORD PTR -12[rbp], 10
+	cmp	DWORD PTR -12[rbp], 10          # i < 11
 	jle	.L9
-	movsd	xmm0, QWORD PTR -8[rbp]
-	movq	rax, xmm0
-	movq	xmm0, rax
+	movsd	xmm0, QWORD PTR -8[rbp]     # возвращаемое значение (ans)
 	leave
-	ret
+	ret                                 # завершение подпрограммы
 	.size	tg, .-tg
+	
 	.globl	generate
 	.type	generate, @function
 generate:
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 16
-	mov	edi, 0
+	
+	mov	edi, 0                          # NULL для time
 	call	time@PLT
-	mov	edi, eax
+	mov	edi, eax                        # time(NULL) для srand
 	call	srand@PLT
 	call	rand@PLT
 	pxor	xmm0, xmm0
-	cvtsi2sd	xmm0, eax
-	movsd	xmm1, QWORD PTR .LC11[rip]
-	divsd	xmm0, xmm1
-	movsd	xmm1, QWORD PTR .LC12[rip]
-	subsd	xmm0, xmm1
-	movsd	QWORD PTR -8[rbp], xmm0
-	movsd	xmm0, QWORD PTR -8[rbp]
-	movq	rax, xmm0
-	movq	xmm0, rax
+	cvtsi2sd	xmm0, eax               # rand()
+	movsd	xmm1, QWORD PTR .LC11[rip]  # RAND_MAX / (1.5707 + 1.5707)
+	divsd	xmm0, xmm1              # (rand() / (RAND_MAX / (1.5707 + 1.5707))
+	movsd	xmm1, QWORD PTR .LC12[rip]  # 1.5707
+	subsd	xmm0, xmm1      # (rand() / (RAND_MAX / (1.5707 + 1.5707)) - 1.5707
+	movsd	QWORD PTR -8[rbp], xmm0     # x
+	movsd	xmm0, QWORD PTR -8[rbp]     # return x
 	leave
-	ret
+	ret                                 # завершение подпрограммы
 	.size	generate, .-generate
+	
 	.section	.rodata
 	.align 8
-.LC7:
+.LC7:                       # -4
 	.long	0
 	.long	-1072693248
+	
 	.align 8
-.LC8:
+.LC8:                       # 4
 	.long	0
 	.long	1074790400
+	
 	.align 8
-.LC9:
+.LC9:                       # 1
 	.long	0
 	.long	1072693248
+	
 	.align 8
-.LC11:
+.LC11:                      # RAND_MAX / (1.5707 + 1.5707)
 	.long	1312589906
 	.long	1103388546
+	
 	.align 8
-.LC12:
+.LC12:                      # 1.5707
 	.long	1388133430
 	.long	1073291670
