@@ -88,11 +88,9 @@ input:                              # подпрограмма считыван�
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 32
-	mov	QWORD PTR -24[rbp], rdi     # загрузка inp на стэк
-	mov	rax, QWORD PTR -24[rbp]     # inp
-	lea	rdx, .LC0[rip]              # строка формата открытия файла
-	mov	rsi, rdx                    # 2-й аргумент для fopen ("r")
-	mov	rdi, rax                    # 1-й аргумент для fopen (inp)
+	mov	r12, rdi                    # загрузка inp в регистр
+	lea	rsi, .LC0[rip]              # 2-й аргумент для fopen ("r")
+	mov	rdi, r12                    # 1-й аргумент для fopen (inp)
 	call	fopen@PLT
 	mov	r14, rax                    # myfile = fopen(inp, "r")
 	cmp	r14, 0                      # сравнения myfile с NULL
@@ -132,27 +130,26 @@ output:                                 # подпрограмма вывода 
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 64
-	mov	QWORD PTR -24[rbp], rdi         # загрузка outp на стэк
-	movsd	QWORD PTR -32[rbp], xmm0    # загрузка x на стэк
-	movsd	QWORD PTR -40[rbp], xmm1    # загрузка ans_ps на стэк
-	movsd	QWORD PTR -48[rbp], xmm2    # загрузка ans_precise на стэк
+	mov	r12, rdi                        # загрузка outp в регистр
+	movsd	xmm3, xmm0                  # загрузка x в регистр xmm3
+	movsd	xmm4, xmm1                  # загрузка ans_ps в регистр
+	movsd	xmm5, xmm2                  # загрузка ans_precise на стэк
 	mov	QWORD PTR -56[rbp], rsi         # загрузка t на стэк
 	
-	mov	rax, QWORD PTR -24[rbp]         # outp
 	lea	rsi, .LC3[rip]                  # 2-й аргумент для fopen (.LC3)
-	mov	rdi, rax                        # 1-й аргумент для fopen (outp)
+	mov	rdi, r12                        # 1-й аргумент для fopen (outp)
 	call	fopen@PLT
 	mov	r14, rax                        # myfile = fopen(outp, "w")
 	
-	movsd	xmm1, QWORD PTR -40[rbp]    # 4-й аргумент для fprintf (ans_ps)
-	movsd	xmm0, QWORD PTR -32[rbp]    # 3-й аргумент для fprintf (x)
+	movsd	xmm1, xmm4                  # 4-й аргумент для fprintf (ans_ps)
+	movsd	xmm0, xmm3                  # 3-й аргумент для fprintf (x)
 	mov	rdi, r14                        # 1-й аргумент для fprintf (myfile)
 	lea	rsi, .LC4[rip]                  # 2-й аргумент для fprintf (.LC4)
 	mov	eax, 2
 	call	fprintf@PLT
 	
 	mov	rdx, QWORD PTR -56[rbp]         # 4-й аргумент для fprintf (t)
-	movq	xmm0, QWORD PTR -48[rbp]    # 3-й аргумент для fprintf (ans_precise)
+	movq	xmm0, xmm5                  # 3-й аргумент для fprintf (ans_precise)
 	mov	rdi, r14                        # 1-й аргумент для fprintf (myfile)
 	lea	rsi, .LC5[rip]                  # 2-й аргумент для fprintf (.LC5)
 	mov	eax, 1
@@ -268,8 +265,6 @@ generate:
 	divsd	xmm0, xmm1              # (rand() / (RAND_MAX / (1.5707 + 1.5707))
 	movsd	xmm1, QWORD PTR .LC12[rip]  # 1.5707
 	subsd	xmm0, xmm1      # (rand() / (RAND_MAX / (1.5707 + 1.5707)) - 1.5707
-	movsd	QWORD PTR -8[rbp], xmm0     # x
-	movsd	xmm0, QWORD PTR -8[rbp]     # return x
 	leave
 	ret                                 # завершение подпрограммы
 	.size	generate, .-generate
