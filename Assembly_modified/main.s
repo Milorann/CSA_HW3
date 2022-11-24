@@ -16,7 +16,7 @@ main:
 	push	rbx
 	sub	rsp, 72
 	mov	DWORD PTR -68[rbp], edi     # загрузка argс на стэк
-	mov	QWORD PTR -80[rbp], rsi     # загрузка argv на стэк
+	mov	r15, rsi                    # загрузка argv в регистр r15
 	
 	cmp	DWORD PTR -68[rbp], 5       # argc сранивается с 5
 	je	.L2
@@ -26,7 +26,7 @@ main:
 	call	exit@PLT
 	
 .L2:
-	mov	rax, QWORD PTR -80[rbp]         # получаем argv
+	mov	rax, r15                        # получаем argv
 	add	rax, 24                         # argv[3]
 	mov	rdi, QWORD PTR [rax]            # аргумент atoi (argv[3])
 	call	atoi@PLT
@@ -37,7 +37,7 @@ main:
 	
 	cmp	DWORD PTR -40[rbp], 1           # choice сравнивается с 1
 	jne	.L3
-	mov	rax, QWORD PTR -80[rbp]         # получаем argv
+	mov	rax, r15                        # получаем argv
 	add	rax, 8                          # argv[1]
 	mov	rdi, QWORD PTR [rax]            # аргумент input (argv[1])
 	call	input@PLT
@@ -70,21 +70,21 @@ main:
 	mov	edi, 0                          # аргумент для time
 	call	time@PLT
 	mov	QWORD PTR -48[rbp], rax         # time_t start = time(NULL)
-	mov	DWORD PTR -36[rbp], 0           # i = 0
+	mov	r12d, 0                         # i = 0
 	jmp	.L8
 	
 .L9:
 	movq	xmm0, QWORD PTR -24[rbp]    # аргумент для tg
 	call	tg@PLT
 	movq	QWORD PTR -32[rbp], xmm0    # ans = tg(x)
-	add	DWORD PTR -36[rbp], 1           # i++
+	add	r12d, 1                         # i++
 	
 .L8:
-	mov	rax, QWORD PTR -80[rbp]         # argv
+	mov	rax, r15                        # argv
 	add	rax, 32                         # argv[4]
 	mov	rdi, QWORD PTR [rax]            # аргумент для atoi (argv[4])
 	call	atoi@PLT
-	cmp	DWORD PTR -36[rbp], eax         # сравнение i с atoi(argv[4])
+	cmp	r12d, eax                       # сравнение i с atoi(argv[4])
 	jl	.L9
 	mov	edi, 0                          # аргумент для time
 	call	time@PLT
@@ -96,7 +96,7 @@ main:
 	movq	xmm0, rax                   # аргумент для tan (x)
 	call	tan@PLT
 	movq	rcx, xmm0                   # tan(x)
-	mov	rax, QWORD PTR -80[rbp]         # argv
+	mov	rax, r15                        # argv
 	add	rax, 16                         # argv[2]
 	mov	rax, QWORD PTR [rax]            # argv[2]
 	movsd	xmm0, QWORD PTR -32[rbp]    # ans
