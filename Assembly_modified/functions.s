@@ -265,6 +265,10 @@ generate:
 	divsd	xmm0, xmm1              # (rand() / (RAND_MAX / (1.5707 + 1.5707))
 	movsd	xmm1, QWORD PTR .LC12[rip]  # 1.5707
 	subsd	xmm0, xmm1      # (rand() / (RAND_MAX / (1.5707 + 1.5707)) - 1.5707
+	movsd	QWORD PTR -8[rbp], xmm0
+	movsd	xmm0, QWORD PTR -8[rbp]
+	movq	rax, xmm0
+	movq	xmm0, rax
 	leave
 	ret                                 # завершение подпрограммы
 	.size	generate, .-generate
