@@ -103,22 +103,19 @@ input:                              # подпрограмма считыван�
 	call	exit@PLT
 	
 .L2:
-	lea	rdx, -16[rbp]
-	mov	rax, QWORD PTR -8[rbp]
-	lea	rcx, .LC2[rip]
-	mov	rsi, rcx
-	mov	rdi, rax
+	lea	rdx, -16[rbp]               # 3-й аргемнт для fscanf (x)
+	lea	rsi, .LC2[rip]              # 2-й аргумент для fscanf (.LC2)
+	mov	rdi, QWORD PTR -8[rbp]      # 1-й аргумент для fscanf (myfile)
 	mov	eax, 0
 	call	__isoc99_fscanf@PLT
-	mov	rax, QWORD PTR -8[rbp]
-	mov	rdi, rax
+	
+	mov	rdi, QWORD PTR -8[rbp]      # аргумент для fclose (myfile)
 	call	fclose@PLT
-	movsd	xmm0, QWORD PTR -16[rbp]
-	movq	rax, xmm0
-	movq	xmm0, rax
+	movsd	xmm0, QWORD PTR -16[rbp]    # возвращаемое значение (x)
 	leave
 	ret
 	.size	input, .-input
+	
 	.section	.rodata
 .LC3:
 	.string	"w"
@@ -131,46 +128,42 @@ input:                              # подпрограмма считыван�
 	.text
 	.globl	output
 	.type	output, @function
-output:
+output:                                 # подпрограмма вывода ответа в файл
 	push	rbp
 	mov	rbp, rsp
 	sub	rsp, 64
-	mov	QWORD PTR -24[rbp], rdi
-	movsd	QWORD PTR -32[rbp], xmm0
-	movsd	QWORD PTR -40[rbp], xmm1
-	movsd	QWORD PTR -48[rbp], xmm2
-	mov	QWORD PTR -56[rbp], rsi
-	mov	rax, QWORD PTR -24[rbp]
-	lea	rdx, .LC3[rip]
-	mov	rsi, rdx
-	mov	rdi, rax
+	mov	QWORD PTR -24[rbp], rdi         # загрузка outp на стэк
+	movsd	QWORD PTR -32[rbp], xmm0    # загрузка x на стэк
+	movsd	QWORD PTR -40[rbp], xmm1    # загрузка ans_ps на стэк
+	movsd	QWORD PTR -48[rbp], xmm2    # загрузка ans_precise на стэк
+	mov	QWORD PTR -56[rbp], rsi         # загрузка t на стэк
+	
+	mov	rax, QWORD PTR -24[rbp]         # outp
+	lea	rsi, .LC3[rip]                  # 2-й аргумент для fopen (.LC3)
+	mov	rdi, rax                        # 1-й аргумент для fopen (outp)
 	call	fopen@PLT
-	mov	QWORD PTR -8[rbp], rax
-	movsd	xmm0, QWORD PTR -40[rbp]
-	mov	rdx, QWORD PTR -32[rbp]
-	mov	rax, QWORD PTR -8[rbp]
-	movapd	xmm1, xmm0
-	movq	xmm0, rdx
-	lea	rdx, .LC4[rip]
-	mov	rsi, rdx
-	mov	rdi, rax
+	mov	QWORD PTR -8[rbp], rax          # myfile = fopen(outp, "w")
+	
+	movsd	xmm1, QWORD PTR -40[rbp]    # 4-й аргумент для fprintf (ans_ps)
+	movsd	xmm0, QWORD PTR -32[rbp]    # 3-й аргумент для fprintf (x)
+	mov	rdi, QWORD PTR -8[rbp]          # 1-й аргумент для fprintf (myfile)
+	lea	rsi, .LC4[rip]                  # 2-й аргумент для fprintf (.LC4)
 	mov	eax, 2
 	call	fprintf@PLT
-	mov	rdx, QWORD PTR -56[rbp]
-	mov	rcx, QWORD PTR -48[rbp]
-	mov	rax, QWORD PTR -8[rbp]
-	movq	xmm0, rcx
-	lea	rcx, .LC5[rip]
-	mov	rsi, rcx
-	mov	rdi, rax
+	
+	mov	rdx, QWORD PTR -56[rbp]         # 4-й аргумент для fprintf (t)
+	movq	xmm0, QWORD PTR -48[rbp]    # 3-й аргумент для fprintf (ans_precise)
+	mov	rdi, QWORD PTR -8[rbp]          # 1-й аргумент для fprintf (myfile)
+	lea	rsi, .LC5[rip]                  # 2-й аргумент для fprintf (.LC5)
 	mov	eax, 1
 	call	fprintf@PLT
-	mov	rax, QWORD PTR -8[rbp]
-	mov	rdi, rax
+	
+	mov	rdi, QWORD PTR -8[rbp]          # аргумент для fclose (myfile)
 	call	fclose@PLT
 	leave
 	ret
 	.size	output, .-output
+	
 	.globl	tg
 	.type	tg, @function
 tg:
