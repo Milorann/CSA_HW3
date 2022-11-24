@@ -94,8 +94,8 @@ input:                              # подпрограмма считыван�
 	mov	rsi, rdx                    # 2-й аргумент для fopen ("r")
 	mov	rdi, rax                    # 1-й аргумент для fopen (inp)
 	call	fopen@PLT
-	mov	QWORD PTR -8[rbp], rax      # myfile = fopen(inp, "r")
-	cmp	QWORD PTR -8[rbp], 0        # сравнения myfile с NULL
+	mov	r14, rax                    # myfile = fopen(inp, "r")
+	cmp	r14, 0                      # сравнения myfile с NULL
 	jne	.L2
 	lea	rdi, .LC1[rip]              # аргумент для printf (puts)
 	call	puts@PLT
@@ -105,11 +105,11 @@ input:                              # подпрограмма считыван�
 .L2:
 	lea	rdx, -16[rbp]               # 3-й аргемнт для fscanf (x)
 	lea	rsi, .LC2[rip]              # 2-й аргумент для fscanf (.LC2)
-	mov	rdi, QWORD PTR -8[rbp]      # 1-й аргумент для fscanf (myfile)
+	mov	rdi, r14                    # 1-й аргумент для fscanf (myfile)
 	mov	eax, 0
 	call	__isoc99_fscanf@PLT
 	
-	mov	rdi, QWORD PTR -8[rbp]      # аргумент для fclose (myfile)
+	mov	rdi, r14                    # аргумент для fclose (myfile)
 	call	fclose@PLT
 	movsd	xmm0, QWORD PTR -16[rbp]    # возвращаемое значение (x)
 	leave
@@ -142,23 +142,23 @@ output:                                 # подпрограмма вывода 
 	lea	rsi, .LC3[rip]                  # 2-й аргумент для fopen (.LC3)
 	mov	rdi, rax                        # 1-й аргумент для fopen (outp)
 	call	fopen@PLT
-	mov	QWORD PTR -8[rbp], rax          # myfile = fopen(outp, "w")
+	mov	r14, rax                        # myfile = fopen(outp, "w")
 	
 	movsd	xmm1, QWORD PTR -40[rbp]    # 4-й аргумент для fprintf (ans_ps)
 	movsd	xmm0, QWORD PTR -32[rbp]    # 3-й аргумент для fprintf (x)
-	mov	rdi, QWORD PTR -8[rbp]          # 1-й аргумент для fprintf (myfile)
+	mov	rdi, r14                        # 1-й аргумент для fprintf (myfile)
 	lea	rsi, .LC4[rip]                  # 2-й аргумент для fprintf (.LC4)
 	mov	eax, 2
 	call	fprintf@PLT
 	
 	mov	rdx, QWORD PTR -56[rbp]         # 4-й аргумент для fprintf (t)
 	movq	xmm0, QWORD PTR -48[rbp]    # 3-й аргумент для fprintf (ans_precise)
-	mov	rdi, QWORD PTR -8[rbp]          # 1-й аргумент для fprintf (myfile)
+	mov	rdi, r14                        # 1-й аргумент для fprintf (myfile)
 	lea	rsi, .LC5[rip]                  # 2-й аргумент для fprintf (.LC5)
 	mov	eax, 1
 	call	fprintf@PLT
 	
-	mov	rdi, QWORD PTR -8[rbp]          # аргумент для fclose (myfile)
+	mov	rdi, r14                        # аргумент для fclose (myfile)
 	call	fclose@PLT
 	leave
 	ret                                 # завершение подпрограммы
@@ -173,10 +173,10 @@ tg:                                     # подпрограмма вычисл�
 	movsd	QWORD PTR -24[rbp], xmm0    # загрузка x на стэк
 	pxor	xmm0, xmm0
 	movsd	QWORD PTR -8[rbp], xmm0     # ans = 0
-	mov	DWORD PTR -12[rbp], 1           # i = 1
+	mov	r13d, 1                         # i = 1
 	jmp	.L6
 .L9:
-	mov	eax, DWORD PTR -12[rbp]         # i
+	mov	eax, r13d                       # i
 	add	eax, eax                        # 2*i
 	cdqe
 	lea	rdx, 0[0+rax*8]
@@ -184,7 +184,7 @@ tg:                                     # подпрограмма вычисл�
 	movsd	xmm2, QWORD PTR [rdx+rax]   # bernulli[2 * i]
 	movsd	QWORD PTR -48[rbp], xmm2    # bernulli[2 * i]
 	pxor	xmm0, xmm0
-	cvtsi2sd	xmm1, DWORD PTR -12[rbp]    # 2-й аргумент для pow (i)
+	cvtsi2sd	xmm1, r13d                  # 2-й аргумент для pow (i)
 	movq	xmm0, QWORD PTR .LC7[rip]       # 1-й аргумент для pow (-4)
 	call	pow@PLT
 	
@@ -192,14 +192,14 @@ tg:                                     # подпрограмма вычисл�
 	movsd	QWORD PTR -48[rbp], xmm0        # -//-
 	pxor	xmm0, xmm0
 	
-	cvtsi2sd	xmm1, DWORD PTR -12[rbp]    # 2-й аргумент для pow (i)
+	cvtsi2sd	xmm1, r13d                  # 2-й аргумент для pow (i)
 	movq	xmm0, QWORD PTR .LC8[rip]       # 1-й аргумент для pow (4)
 	call	pow@PLT
 	
 	movsd	xmm1, QWORD PTR .LC9[rip]       # 1
 	subsd	xmm1, xmm0                      # 1 - pow(4, i)
 	mulsd	xmm1, QWORD PTR -48[rbp]
-	mov	eax, DWORD PTR -12[rbp]             # i
+	mov	eax, r13d                           # i
 	add	eax, eax                            # 2*i
 	cdqe
 	lea	rdx, 0[0+rax*8]
@@ -223,7 +223,7 @@ tg:                                     # подпрограмма вычисл�
 	movsd	QWORD PTR -48[rbp], xmm1    # -//-
 	fld	QWORD PTR -48[rbp]
 	fstp	TBYTE PTR -48[rbp]
-	mov	eax, DWORD PTR -12[rbp]         # i
+	mov	eax, r13d                       # i
 	add	eax, eax                        # 2 * i
 	sub	eax, 1                          # 2 * i - 1
 	mov	DWORD PTR -28[rbp], eax         # 2 * i - 1
@@ -241,9 +241,9 @@ tg:                                     # подпрограмма вычисл�
 	fld	QWORD PTR -8[rbp]
 	faddp	st(1), st
 	fstp	QWORD PTR -8[rbp]
-	add	DWORD PTR -12[rbp], 1           # i++
+	add	r13d, 1                         # i++
 .L6:
-	cmp	DWORD PTR -12[rbp], 10          # i < 11
+	cmp	r13d, 10                        # i < 11
 	jle	.L9
 	movsd	xmm0, QWORD PTR -8[rbp]     # возвращаемое значение (ans)
 	leave
