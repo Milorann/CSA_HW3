@@ -131,9 +131,9 @@ output:                                 # подпрограмма вывода 
 	mov	rbp, rsp
 	sub	rsp, 64
 	mov	r12, rdi                        # загрузка outp в регистр
-	movsd	xmm3, xmm0                  # загрузка x в регистр xmm3
-	movsd	xmm4, xmm1                  # загрузка ans_ps в регистр
-	movsd	xmm5, xmm2                  # загрузка ans_precise на стэк
+	movsd	QWORD PTR -32[rbp], xmm0                  # загрузка x в регистр xmm3
+	movsd	QWORD PTR -40[rbp], xmm1                  # загрузка ans_ps в регистр
+	movsd	QWORD PTR -48[rbp], xmm2                  # загрузка ans_precise на стэк
 	mov	QWORD PTR -56[rbp], rsi         # загрузка t на стэк
 	
 	lea	rsi, .LC3[rip]                  # 2-й аргумент для fopen (.LC3)
@@ -141,15 +141,15 @@ output:                                 # подпрограмма вывода 
 	call	fopen@PLT
 	mov	r14, rax                        # myfile = fopen(outp, "w")
 	
-	movsd	xmm1, xmm4                  # 4-й аргумент для fprintf (ans_ps)
-	movsd	xmm0, xmm3                  # 3-й аргумент для fprintf (x)
+	movsd	xmm1, QWORD PTR -40[rbp]                  # 4-й аргумент для fprintf (ans_ps)
+	movsd	xmm0, QWORD PTR -32[rbp]                  # 3-й аргумент для fprintf (x)
 	mov	rdi, r14                        # 1-й аргумент для fprintf (myfile)
 	lea	rsi, .LC4[rip]                  # 2-й аргумент для fprintf (.LC4)
 	mov	eax, 2
 	call	fprintf@PLT
 	
 	mov	rdx, QWORD PTR -56[rbp]         # 4-й аргумент для fprintf (t)
-	movq	xmm0, xmm5                  # 3-й аргумент для fprintf (ans_precise)
+	movq	xmm0, QWORD PTR -48[rbp]                  # 3-й аргумент для fprintf (ans_precise)
 	mov	rdi, r14                        # 1-й аргумент для fprintf (myfile)
 	lea	rsi, .LC5[rip]                  # 2-й аргумент для fprintf (.LC5)
 	mov	eax, 1
